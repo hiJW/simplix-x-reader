@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SimpliX</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <main>
+    <header>
+      <div class="brand">
+        <img src="icons/simplix-128.png" alt="" width="32" height="32">
+        <h1>SimpliX</h1>
+      </div>
+      <label class="switch">
+        <input id="enabled" type="checkbox">
+        <span class="switch-track" aria-hidden="true"></span>
+        <span>启用</span>
+      </label>
+    </header>
+
+    <label class="field">
+      <span>DeepSeek API Key</span>
+      <input id="apiKey" type="password" autocomplete="off" placeholder="sk-...">
+    </label>
+
+    <div class="actions">
+      <button id="save" type="button">保存</button>
+      <button id="clear" type="button">清空 Key</button>
+    </div>
+
+    <details id="promptPanel" class="prompt-panel">
+      <summary>改写提示词</summary>
+
+      <label class="field">
+        <span>提示词 <em id="rewritePromptState"></em></span>
+        <textarea id="rewritePrompt" rows="12" spellcheck="false"></textarea>
+      </label>
+      <p class="hint">决定英文简化的风格与难度。占位符 [[n]] 与加粗/斜体的保护规则由扩展自动追加，不用写在这里；要求输出 JSON {"rewritten": "..."} 的格式约定请保留。</p>
+
+      <div class="actions">
+        <button id="savePrompts" type="button">保存提示词</button>
+        <button id="resetPrompts" type="button">恢复默认</button>
+      </div>
+    </details>
+
+    <p id="status" role="status"></p>
+  </main>
+  <script src="prompts.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

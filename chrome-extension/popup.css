@@ -1,0 +1,296 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html, body {
+  /* 面板展开后不允许整体上下滚动——提示词内容多时只在文本框内部滚动，见下方 textarea 规则。 */
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  width: 420px; /* 提示词编辑面板需要更宽的编辑区 */
+  color: #111;
+  background: #fff;
+  font: 13px -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", sans-serif;
+}
+
+main {
+  min-height: 206px;
+  padding: 16px;
+  background: #fff;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.brand img {
+  display: block;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 650;
+}
+
+.switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #333;
+  user-select: none;
+}
+
+.switch input {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  opacity: 0;
+}
+
+.switch-track {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  border: 1px solid #d7d7d7;
+  border-radius: 999px;
+  background: #ececec;
+  transition: background .18s, border-color .18s;
+}
+
+.switch-track::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #777;
+  transition: transform .18s;
+}
+
+.switch input:checked + .switch-track {
+  border-color: #050505;
+  background: #050505;
+}
+
+.switch input:checked + .switch-track::after {
+  background: #fff;
+  transform: translateX(16px);
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.field span {
+  color: #333;
+  font-weight: 600;
+}
+
+input[type="password"] {
+  width: 100%;
+  height: 38px;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+  padding: 0 11px;
+  color: #111;
+  background: #fafafa;
+  font: inherit;
+}
+
+input[type="password"]::placeholder {
+  color: #aaa;
+}
+
+input[type="password"]:focus {
+  outline: 2px solid rgba(5, 5, 5, .1);
+  border-color: #050505;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+button {
+  height: 36px;
+  border: 1px solid #050505;
+  border-radius: 8px;
+  padding: 0 10px;
+  color: #fff;
+  background: linear-gradient(180deg, #181818 0%, #050505 100%);
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 650;
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .16),
+    0 1px 1px rgba(0, 0, 0, .12),
+    0 6px 14px rgba(0, 0, 0, .08);
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+
+button:hover {
+  background: linear-gradient(180deg, #202020 0%, #070707 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .18),
+    0 1px 1px rgba(0, 0, 0, .14),
+    0 7px 16px rgba(0, 0, 0, .1);
+}
+
+button:active {
+  transform: translateY(1px);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, .28),
+    0 1px 1px rgba(0, 0, 0, .08);
+}
+
+/* 清空 Key：白色扁平次要按钮，无微立体质感。 */
+#clear {
+  color: #111;
+  background: #fff;
+  border-color: #d8d8d8;
+  box-shadow: none;
+}
+
+#clear:hover {
+  background: #f5f5f5;
+  border-color: #cfcfcf;
+  box-shadow: none;
+}
+
+/* 提示词面板是次要/调试区：按钮做得克制紧凑，不与主「保存」争注意力，让面板有层次。
+   保存提示词 = 浅灰次要按钮；恢复默认 = 更轻的幽灵(文字)按钮。 */
+#savePrompts,
+#resetPrompts {
+  height: 30px;
+  padding: 0 14px;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: none;
+}
+
+#savePrompts {
+  color: #111;
+  background: #f0f0f0;
+  border-color: #e0e0e0;
+}
+
+#savePrompts:hover {
+  background: #e8e8e8;
+  border-color: #d4d4d4;
+}
+
+#resetPrompts {
+  color: #777;
+  background: transparent;
+  border-color: transparent;
+}
+
+#resetPrompts:hover {
+  color: #111;
+  background: #f0f0f0;
+}
+
+#clear:active,
+#savePrompts:active,
+#resetPrompts:active {
+  transform: none;
+  box-shadow: none;
+}
+
+/* 无边框方框：调试区就是一行浅灰小字开关 + 展开的内容，与主体左对齐。 */
+.prompt-panel {
+  margin-top: 14px;
+}
+
+/* 折叠标题是「进入高级/调试」的次要入口，不是主标题：
+   用低调的浅灰小字，让它退到主操作(保存/清空 Key)之后。 */
+.prompt-panel summary {
+  padding: 6px 0;
+  color: #999;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+}
+
+.prompt-panel summary:hover {
+  color: #555;
+}
+
+.prompt-panel[open] summary {
+  margin-bottom: 10px;
+}
+
+.prompt-panel .actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.prompt-panel .field span em {
+  color: #888;
+  font-style: normal;
+  font-weight: 400;
+}
+
+textarea {
+  width: 100%;
+  height: 180px; /* 固定高度：内容超出时框内自行滚动，不撑高整个 popup */
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+  padding: 8px 11px;
+  color: #111;
+  background: #fff;
+  font: 12px/1.5 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  overflow-y: auto;
+  resize: none; /* 手动拖拽会撑高整个 popup，导致外层出现滚动条，故禁用 */
+}
+
+textarea:focus {
+  outline: 2px solid rgba(5, 5, 5, .1);
+  border-color: #050505;
+}
+
+.hint {
+  margin: -6px 0 14px;
+  color: #888;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+#status {
+  /* 空状态不预留整行高度：折叠的提示词行下面若强行占位会显得空白过宽，
+     等真有提示文字时自然撑开即可，一行文字的高度变化不明显。 */
+  min-height: 0;
+  margin: 8px 0 0;
+  color: #666;
+  line-height: 1.4;
+}
